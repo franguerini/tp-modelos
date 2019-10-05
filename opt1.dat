@@ -4,7 +4,13 @@
  * Creation Date: Oct 3, 2019 at 9:06:26 PM
  *********************************************/
 
- COD_POSTAL = {"A", "B", "C", "D"};
- CANT_COD_POSTAL = 4;
- CANT_CAJAS = [10000, 200, 10, 10];
- D_P_P = 3;
+COD_POSTAL = {"A", "B", "C", "D", "E", "F"};
+//CANT_COD_POSTAL = 6;
+
+CANT_CAJAS = [ 30, 30, 10, 10, 10, 10 ]; //Cajas por cod post
+
+D_P_P = 3;
+
+TIEMPO_PROC_CAJA = 2; //Expresado en segundos
+
+/*Output: tiempo 50 seg*/ 
