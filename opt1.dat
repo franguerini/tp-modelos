@@ -4,5 +4,7 @@
  * Creation Date: Oct 3, 2019 at 9:06:26 PM
  *********************************************/
 
+ COD_POSTAL = {"A", "B", "C", "D"};
+ CANT_COD_POSTAL = 4;
  CANT_CAJAS = [10000, 200, 10, 10];
- 
+ D_P_P = 3;

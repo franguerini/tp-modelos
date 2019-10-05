@@ -14,25 +14,34 @@
  /*
  *	CODIGOS POSTALES
  */
- {string} COD_POSTAL = {"A", "B", "C", "D"};
+ {string} COD_POSTAL = ...;
+ int CANT_COD_POSTAL = ...;
  
  /*
  * Destinos por pasada
  * - Ramas del arbol
  */
- int D_P_P = 2;
-
+ int D_P_P = ...;
+ 
  /* 
- 	Las estaciones son nodos del arbol
- 	TODO: GENERALIZAR PARA QUE SE GENERE LA CANTIDAD DE ESTACIONES NECESARIAS SEGUN D_P_P
- */
- {int} ESTACIONES = {0, 1, 2, 3, 4, 5, 6, 7,8,9,10,11,12,13,14};
-  
+ 	Las estaciones son nodos del arbol:
+ 	
+	Calculo el rango de la sumatoria para las estaciones
+*/
+ range rangoSumaEstaciones = 1..ftoi(ceil((CANT_COD_POSTAL-1) / (D_P_P -1 ) ));
+ 
+ /*
+	Calculo cantidad de estaciones
+*/
+ int cantEstaciones = ftoi((sum(i in rangoSumaEstaciones) D_P_P ^ i) + 1);
+ 
+ range ESTACIONES = 0..(cantEstaciones-1);
+
   /* 
  	Mismo rango de estaciones pero sin raiz para algunos calculos
- 	TODO: GENERALIZAR PARA QUE SE GENERE LA CANTIDAD DE ESTACIONES NECESARIAS SEGUN D_P_P
  */
- {int} ESTACIONES_SIN_RAIZ = {1, 2, 3, 4, 5, 6, 7,8,9,10,11,12,13,14};
+  range ESTACIONES_SIN_RAIZ = (0+1)..(cantEstaciones-1);
+ 
  
    /* 
 	Rango para recorrer la cantidad de hermanos que tiene un nodo
@@ -100,10 +109,13 @@
  	Funcion objetivo
  	Minimizar la suma de los elementos de cada estacion * Cant de cajas
   */
-  minimize sum(estacion in ESTACIONES, cod_postal in COD_POSTAL) (codigos_postales_en_estacion[estacion][cod_postal] * CANT_CAJAS[cod_postal]); 
+ execute {
+  	a  = 1;
+ }
+ 
+ minimize sum(estacion in ESTACIONES, cod_postal in COD_POSTAL) (codigos_postales_en_estacion[estacion][cod_postal] * CANT_CAJAS[cod_postal]); 
 
  subject to {
-  
  	/*
  		Inicializar la primera estacion con unos.
  		Todos los codigos postales estan en la primer estacion
