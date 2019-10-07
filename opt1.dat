@@ -1,16 +1,18 @@
 /*********************************************
- * OPL 12.8.0.0 Data
- * Author: franciscoguerini
- * Creation Date: Oct 3, 2019 at 9:06:26 PM
+ * OPL 12.7.1.0 Data
+ * Author: La catedra
+ * Creation Date: Aug 29, 2019 at 8:44:07 PM
  *********************************************/
 
-COD_POSTAL = {"A", "B", "C", "D", "E", "F"};
-//CANT_COD_POSTAL = 6;
+COD_POST = {"A", "B", "C", "D", "E", "F", "G", "H", 
+			"I", "J", "K", "L", "M", "N", "O", "P",
+			"Q", "R", "S", "T"}; 
 
-CANT_CAJAS = [ 30, 30, 10, 10, 10, 10 ]; //Cajas por cod post
+CAJAS = [ 	60, 	20, 	10, 	40, 	80, 	900, 	50,	10,
+			400, 	450, 	200, 	1200, 	1000, 	50, 	90, 500,
+			30, 	120, 	300, 	200 ]; //Cajas por cod post
 
-D_P_P = 3;
+DESTINOS_POR_PASADA = 4;
 
-TIEMPO_PROC_CAJA = 2; //Expresado en segundos
+TIEMPO_PROC_CAJA = 1; //Expresado en segundos
 
-/*Output: tiempo 50 seg*/ 

@@ -14,14 +14,14 @@
  /*
  *	CODIGOS POSTALES
  */
- {string} COD_POSTAL = ...;
- int CANT_COD_POSTAL = card(COD_POSTAL);
+ {string} COD_POST = ...;
+ int CANT_COD_POSTAL = card(COD_POST);
  
  /*
  * Destinos por pasada
  * - Ramas del arbol
  */
- int D_P_P = ...;
+ int DESTINOS_POR_PASADA = ...;
  int TIEMPO_PROC_CAJA = ...;
  
  /* 
@@ -29,12 +29,12 @@
  	
 	Calculo el rango de la sumatoria para las estaciones
 */
- range rangoSumaEstaciones = 1..ftoi(ceil((CANT_COD_POSTAL-1) / (D_P_P -1 ) ));
+ range rangoSumaEstaciones = 1..ftoi(ceil((CANT_COD_POSTAL-1) / (DESTINOS_POR_PASADA -1 ) ));
  
  /*
 	Calculo cantidad de estaciones
 */
- int cantEstaciones = ftoi((sum(i in rangoSumaEstaciones) D_P_P ^ i) + 1);
+ int cantEstaciones = ftoi((sum(i in rangoSumaEstaciones) DESTINOS_POR_PASADA ^ i) + 1);
  
  range ESTACIONES = 0..(cantEstaciones-1);
 
@@ -47,12 +47,12 @@
    /* 
 	Rango para recorrer la cantidad de hermanos que tiene un nodo
    */
- range RANGO_CANT_HERMANOS_POR_NODO = 0..(D_P_P - 1); 
+ range RANGO_CANT_HERMANOS_POR_NODO = 0..(DESTINOS_POR_PASADA - 1); 
  
    /* 
  	Rango para recorrer todos los grupos de hermanos que hay en el arbol
  */
- range ESTACIONES_HERMANAS = 0..(ftoi(floor(cantEstaciones/D_P_P)) - 1);
+ range ESTACIONES_HERMANAS = 0..(ftoi(floor(cantEstaciones/DESTINOS_POR_PASADA)) - 1);
     
  /*
  	Estaciones con un solo elemento
@@ -72,33 +72,33 @@
  /*
 	Matriz que guarda las indicadoras de cuales son los codigos postales que se tienen por estacion
  */
- dvar int codigos_postales_en_estacion[ESTACIONES][COD_POSTAL] in 0..1;
+ dvar int codigos_postales_en_estacion[ESTACIONES][COD_POST] in 0..1;
 
- int CANT_CAJAS[COD_POSTAL] = ...;
+ int CAJAS[COD_POST] = ...;
  
  /*
  	Arreglo que pasandole un nodo te devuelve el padre
  */
- int IndicePadre[i in ESTACIONES] = i > 0 ? ftoi(floor((i - 1) / D_P_P)) : 0;
+ int IndicePadre[i in ESTACIONES] = i > 0 ? ftoi(floor((i - 1) / DESTINOS_POR_PASADA)) : 0;
  
  /*
  	Matriz con los distintos grupos de hermanos
  	Si se le pasa una estacion devuelve sus hermanos
  */
- int indiceHermanos[i in ESTACIONES_HERMANAS][j in RANGO_CANT_HERMANOS_POR_NODO] = (i*D_P_P) + 1 + j;
+ int indiceHermanos[i in ESTACIONES_HERMANAS][j in RANGO_CANT_HERMANOS_POR_NODO] = (i*DESTINOS_POR_PASADA) + 1 + j;
 
 
   /*
  	Funcion que recibe una estacion y devuelve la cantidad de codigos postales que tiene la estacion
   */
- dexpr int SumaCodigosPostalesEnEstacion[estacion in ESTACIONES] = sum(cod_postal in COD_POSTAL) codigos_postales_en_estacion[estacion][cod_postal];
+ dexpr int SumaCodigosPostalesEnEstacion[estacion in ESTACIONES] = sum(cod_postal in COD_POST) codigos_postales_en_estacion[estacion][cod_postal];
  
    /*
    Funcion que devuelve si la estacion tiene ese codigo postal
    1: la estacion n tiene el cp
    0: la estacion n no tiene el cp
   */
- dexpr int estacionTieneCodPostal[estacion in ESTACIONES][cod_postal in COD_POSTAL] = codigos_postales_en_estacion[estacion][cod_postal];
+ dexpr int estacionTieneCodPostal[estacion in ESTACIONES][cod_postal in COD_POST] = codigos_postales_en_estacion[estacion][cod_postal];
  
   /*
  	Funcion que recibe un grupo de hermanos y devuelve la cantidad de codigos postales que tiene el grupo
@@ -110,14 +110,14 @@
  	Minimizar la suma de los elementos de cada estacion * Cant de cajas
   */
  
- minimize sum(estacion in ESTACIONES, cod_postal in COD_POSTAL) (codigos_postales_en_estacion[estacion][cod_postal] * CANT_CAJAS[cod_postal] * TIEMPO_PROC_CAJA) - sum(cod_postal in COD_POSTAL) (CANT_CAJAS[cod_postal] * TIEMPO_PROC_CAJA); 
+ minimize sum(estacion in ESTACIONES, cod_postal in COD_POST) (codigos_postales_en_estacion[estacion][cod_postal] * CAJAS[cod_postal] * TIEMPO_PROC_CAJA) - sum(cod_postal in COD_POST) (CAJAS[cod_postal] * TIEMPO_PROC_CAJA); 
 
  subject to {
  	/*
  		Inicializar la primera estacion con unos.
  		Todos los codigos postales estan en la primer estacion
  	*/
- 	forall(cp in COD_POSTAL) {
+ 	forall(cp in COD_POST) {
  		primera_estacion_tiene_todos_los_CP: codigos_postales_en_estacion[0][cp] == 1;
  	}
  	
@@ -164,7 +164,7 @@
 	/* 
 		- El hijo puede tener solo elementos qeu tenia el padre
 	*/
-	forall(n in ESTACIONES_SIN_RAIZ, cp in COD_POSTAL) {
+	forall(n in ESTACIONES_SIN_RAIZ, cp in COD_POST) {
  		los_hijos_solo_pueden_tener_elementos_del_padre: codigos_postales_en_estacion[n][cp] <= codigos_postales_en_estacion[IndicePadre[n]][cp];
 	} 	
 	
@@ -172,7 +172,7 @@
 		- Las estaciones hermanas no pueden tener los mismo elementos 
 
 	*/
-	 forall(estacion in ESTACIONES_HERMANAS, cp in COD_POSTAL) {
+	 forall(estacion in ESTACIONES_HERMANAS, cp in COD_POST) {
  		hermanas_no_pueden_tener_los_mismos_elementos: sum( hermano in RANGO_CANT_HERMANOS_POR_NODO) estacionTieneCodPostal[indiceHermanos[estacion][hermano]][cp] <= 1;
  	}
 	
